@@ -1,0 +1,2 @@
+class DuplicateFinders::ImagesFinder
+end

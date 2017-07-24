@@ -9,7 +9,13 @@ class TelegramRouter
   end
 
   def respond!
-    (message.photo.any? && photo_response) || text_response
+    if entities.include?('url')
+      url_response
+    elsif entities.include?('bot_command')
+      text_response
+    else
+      (message.photo.any? && photo_response)
+    end
   end
 
   def photo_response
@@ -33,5 +39,21 @@ class TelegramRouter
     end
 
     false
+  end
+
+  def url_response
+    if response = TelegramResponder::Url.new(message).respond!
+      BotLogger.info("New Tiemur! #{message.from.username}, #{response}")
+
+      return response
+    end
+
+    false
+  end
+
+  private
+
+  def entities
+    message.entities
   end
 end

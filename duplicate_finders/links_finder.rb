@@ -1,0 +1,2 @@
+class DuplicateFinders::LinksFinder
+end
